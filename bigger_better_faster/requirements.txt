@@ -6,6 +6,7 @@ atari-py==0.2.9
 jax>=0.3.14,<0.4
 jaxlib>=0.3.14,<0.4
 flax==0.5.3
+scipy==1.9.3
 optax==0.1.4
 chex==0.1.5
 ale-py
