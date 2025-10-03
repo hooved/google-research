@@ -8,6 +8,12 @@ To install the repository, simply run `pip install -r requirements.txt`.
 Note that depending on your operating system and cuda version extra steps may be necessary to
 successfully install JAX: please see [the JAX install instructions](https://pypi.org/project/jax/) for guidance.
 
+On 03-Oct-2025, ubuntu 24.04, 4x 5090, nvidia Driver Version: 570.172.08, CUDA Version: 12.8
+```
+uv venv venv -p 3.10
+source venv/bin/activate
+uv pip install -r requirements.txt
+```
 
 ## Training
 To run a BBF agent locally, run

@@ -1,17 +1,23 @@
+# JAX 0.3.x wheels (<0.4) for cp310 live here:
+--find-links https://storage.googleapis.com/jax-releases/jax_releases.html
+
 absl-py
-atari-py
-jax >= 0.3.14
-jaxlib >= 0.3.14
+atari-py==0.2.9
+jax>=0.3.14,<0.4
+jaxlib>=0.3.14,<0.4
+flax==0.5.3
+optax==0.1.4
+chex==0.1.5
 ale-py
-flax >= 0.6.3
 gym[atari,accept-rom-license]<=0.25.2
 dopamine-rl == 4.0.5
-numpy
+numpy==1.23.5
 gin-config
-tensorflow
-tensorflow-estimator
-tbp-nightly
-keras
+tensorflow==2.11.1
+tensorflow-estimator==2.11.0
+tensorboard==2.11.2
+tensorboard-plugin-profile ~= 2.11
+keras==2.11.*
 ipdb
 wandb
 pyglet == 1.4.11
