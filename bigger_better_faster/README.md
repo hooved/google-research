@@ -19,7 +19,7 @@ uv pip install -r requirements.txt
 To run a BBF agent locally, run
 
 ```
-python -m bbf.train \
+PYTHONPATH=.. python -m bbf.train \
     --agent=BBF \
     --gin_files=bbf/configs/BBF.gin \
     --base_dir=/tmp/online_rl/bbf \
