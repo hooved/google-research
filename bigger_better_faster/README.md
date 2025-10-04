@@ -10,20 +10,14 @@ successfully install JAX: please see [the JAX install instructions](https://pypi
 
 On 03-Oct-2025, ubuntu 24.04, 4x 5090, nvidia Driver Version: 570.172.08, CUDA Version: 12.8
 ```
-uv venv venv -p 3.10
-source venv/bin/activate
-uv pip install -r requirements.txt
+./install.sh
 ```
 
 ## Training
 To run a BBF agent locally, run
 
 ```
-PYTHONPATH=.. python -m bbf.train \
-    --agent=BBF \
-    --gin_files=bbf/configs/BBF.gin \
-    --base_dir=/tmp/online_rl/bbf \
-    --run_number=1
+./run.sh
 ```
 
 ## References

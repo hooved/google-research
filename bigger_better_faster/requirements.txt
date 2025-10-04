@@ -1,32 +1,47 @@
-# JAX 0.3.x wheels (<0.4) for cp310 live here:
---find-links https://storage.googleapis.com/jax-releases/jax_releases.html
-
+jax[cuda12] < 0.7
+tfp-nightly[jax]
 absl-py
-atari-py==0.2.9
-jax>=0.3.14,<0.4
-jaxlib>=0.3.14,<0.4
-flax==0.6.2
-scipy==1.9.3
-orbax!=0.1.8
-#orbax-checkpoint==0.4.3 
-#optax==0.1.4
-#chex==0.1.5
-ale-py
-gym[atari,accept-rom-license]<=0.25.2
-dopamine-rl == 4.0.5
-numpy==1.23.5
-gin-config
-tensorflow==2.11.1
-tensorflow-estimator==2.11.0
-tensorboard==2.11.2
-tensorboard-plugin-profile ~= 2.11
-keras==2.11.*
-ipdb
-wandb
-pyglet == 1.4.11
-matplotlib
-dm-haiku
-protobuf == 3.19.1
-importlib-metadata == 4.11.3
-importlib-resources == 5.7.1
-etils
+#dopamine-rl
+#git+https://github.com/hooved/dopamine.git@bec5f4e108b0572e58fc1af73136e978237c8463#egg=dopamine-rl
+#flax
+#optax
+#chex
+#numpy
+#matplotlib
+#wandb
+
+## RL envs
+#gymnasium[atari,accept-rom-license]
+#ale-py
+
+## Optional (choose one NN stack for agents)
+#dm-haiku
+
+## Debugging / utils
+#ipdb
+#etils
+
+
+#absl-py
+#atari-py
+#jax[cuda12]
+#jaxlib >= 0.3.14
+#ale-py
+#flax >= 0.6.3
+#gym[atari,accept-rom-license]<=0.25.2
+#dopamine-rl == 4.0.5
+#numpy
+#gin-config
+#tensorflow
+#tensorflow-estimator
+#tbp-nightly
+#keras
+#ipdb
+#wandb
+#pyglet == 1.4.11
+#matplotlib
+#dm-haiku
+#protobuf == 3.19.1
+#importlib-metadata == 4.11.3
+#importlib-resources == 5.7.1
+#etils
