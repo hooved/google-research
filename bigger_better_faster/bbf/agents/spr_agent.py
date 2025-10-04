@@ -30,7 +30,6 @@ from flax.core.frozen_dict import FrozenDict
 from flax.training import dynamic_scale as dynamic_scale_lib
 import gin
 import jax
-import jax.lib.xla_bridge as xb
 import jax.numpy as jnp
 import flax
 import numpy as onp
@@ -44,13 +43,8 @@ from bigger_better_faster.bbf.replay_memory import subsequence_replay_buffer
 def _pmap_device_order():
   """Gets JAX's default device assignments as used in pmap."""
   if jax.process_count() == 1:
-    return [
-        d
-        for d in xb.get_backend().get_default_device_assignment(
-            jax.device_count()
-        )
-        if d.process_index == jax.process_index()
-    ]
+    host_id = jax.process_index()
+    return [d for d in jax.devices() if d.process_index == host_id]
   else:
     return jax.local_devices()
 
