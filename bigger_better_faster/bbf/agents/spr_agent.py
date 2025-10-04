@@ -32,6 +32,7 @@ import gin
 import jax
 import jax.lib.xla_bridge as xb
 import jax.numpy as jnp
+import flax
 import numpy as onp
 import optax
 import tensorflow as tf
@@ -1309,7 +1310,7 @@ class BBFAgent(dqn_agent.JaxDQNAgent):
         optax.masked(optimizer, self.head_mask),
     )
 
-    self.optimizer_state = self.optimizer.init(self.online_params)
+    self.optimizer_state = self.optimizer.init(flax.core.freeze(self.online_params))
     self.target_network_params = copy.deepcopy(self.online_params)
     self.random_params = copy.deepcopy(self.online_params)
 
