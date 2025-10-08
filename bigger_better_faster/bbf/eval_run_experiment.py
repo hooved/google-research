@@ -348,6 +348,8 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     # Create envs
     live_envs = list(range(len(envs)))
 
+    if os.environ["CAPTURE_RGB"]:
+      for env in envs: env.capture_rgb = True
     if needs_reset:
       new_obs = self._initialize_episode(envs)
       new_obses = np.zeros((2, len(envs), *self._agent.observation_shape, 1))
@@ -444,6 +446,8 @@ class DataEfficientAtariRunner(run_experiment.Runner):
           or (episodes is not None and total_episodes > episodes)
       ):
         break
+    if os.environ["CAPTURE_RGB"]:
+      for env in envs: env.capture_rgb = False
 
     state = (new_obses, rewards, terminals, episode_end, cum_rewards,
              cum_lengths)
