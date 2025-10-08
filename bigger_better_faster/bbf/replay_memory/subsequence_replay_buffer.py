@@ -548,6 +548,16 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
   def sample(self, *args, **kwargs):
     return self.sample_transition_batch(*args, **kwargs)
 
+  # currently called from within debugger
+  def save_clip(self, fn:str="clip.npz", max_frame:int=None):
+    out = self._store["observation"].squeeze(1)
+    if max_frame: out = out[0:max_frame]
+    np.savez_compressed(fn, clip=out)
+
+  # analysis utils
+  def view_store_nonzeros(self, key:str) -> np.ndarray:
+    return np.where(self._store[key].flatten() > 0)[0]
+
   def sample_transition_batch(
       self,
       rng=None,
