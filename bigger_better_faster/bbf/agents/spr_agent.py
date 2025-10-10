@@ -1132,7 +1132,6 @@ class BBFAgent(dqn_agent.JaxDQNAgent):
     self._num_atoms = int(num_atoms)
     vmin = float(vmin) if vmin else -vmax
     self._support = jnp.linspace(vmin, vmax, self._num_atoms)
-    self._replay_scheme = replay_scheme
     self._replay_type = replay_type
     self._double_dqn = bool(double_dqn)
     self._noisy = bool(noisy)
@@ -1242,6 +1241,7 @@ class BBFAgent(dqn_agent.JaxDQNAgent):
         update_horizon=self.max_update_horizon,
         summary_writer=summary_writer,
         seed=seed,
+        replay_scheme=replay_scheme
     )
 
     self.set_replay_settings()
