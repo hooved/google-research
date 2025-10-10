@@ -675,13 +675,13 @@ class JaxSubsequenceParallelEnvReplayBuffer(object):
             'observation',
             next_indices,
             b_indices,
-            censor_before,
+            censor_before, # NOTE isn't this only validated for the initial state, not next_state if next_state is >= frame_stack_len away?
         )
         output = self.restore_leading_dims(batch_size, subseq_len, output)
       elif name == 'same_trajectory':
         output = self._store['terminal'][state_indices, b_indices]
         output = self.restore_leading_dims(batch_size, subseq_len, output)
-        output[0, :] = 0
+        output[0, :] = 0 # NOTE should this instead be `output[:, 0] = 0`?
         output = (1 - output).cumprod(1)
       elif name in ('next_action', 'next_reward'):
         output = self._store[name.lstrip('next_')][next_indices, b_indices]
