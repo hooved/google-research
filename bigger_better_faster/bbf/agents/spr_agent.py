@@ -257,6 +257,8 @@ def jit_reset(
       },
       support=support,
   )
+  random_params = flax.core.freeze(random_params)
+  target_random_params = flax.core.freeze(target_random_params)
 
   if shrink_perturb_keys:
     online_params = interpolate_weights(
@@ -266,7 +268,7 @@ def jit_reset(
         old_weight=shrink_factor,
         new_weight=perturb_factor,
     )
-  online_params = FrozenDict(
+  online_params = flax.core.freeze(
       copy_params(online_params, random_params, keys=keys_to_copy))
 
   updated_optim_state = []
@@ -292,7 +294,7 @@ def jit_reset(
       )
     target_network_params = copy_params(
         target_network_params, target_random_params, keys=keys_to_copy)
-    target_network_params = FrozenDict(target_network_params)
+    target_network_params = flax.core.freeze(target_network_params)
 
   return online_params, target_network_params, optimizer_state, random_params
 
@@ -750,7 +752,7 @@ def train(
     grad_norm = tree_norm(grad)
     aux_losses["GradNorm"] = grad_norm
     updates, new_optimizer_state = optimizer.update(
-        grad, optimizer_state, params=online_params)
+        flax.core.freeze(grad), optimizer_state, params=online_params)
     new_online_params = optax.apply_updates(online_params, updates)
 
     if dynamic_scale:
@@ -795,8 +797,8 @@ def train(
     )
 
   init_state = (
-      online_params,
-      target_params,
+      flax.core.freeze(online_params),
+      flax.core.freeze(target_params),
       optimizer_state,
       dynamic_scale,
       rng,
@@ -1317,6 +1319,10 @@ class BBFAgent(dqn_agent.JaxDQNAgent):
     self.random_params = jax.device_put(
         self.random_params, jax.local_devices()[0]
     )
+    self.online_params = flax.core.freeze(self.online_params)
+    self.target_params = flax.core.freeze(self.target_params)
+    self.random_params = flax.core.freeze(self.random_params)
+
     self.optimizer_state = jax.device_put(
         self.optimizer_state, jax.local_devices()[0]
     )
