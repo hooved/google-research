@@ -168,6 +168,12 @@ def create_env_wrapper(create_env_fn):
 
   return inner_create
 
+def save_rgb_clips(envs:list[atari_lib.AtariPreprocessing], fn_prefix:str="clip"):
+  for i, env in enumerate(envs):
+    assert len(env.rgb) > 0
+    clip = np.stack(env.rgb, 0)
+    fn = fn_prefix if i == 0 else fn + f"_{i}"
+    np.savez_compressed(f"{fn}.npz", clip=clip)
 
 @gin.configurable
 class DataEfficientAtariRunner(run_experiment.Runner):
@@ -348,8 +354,6 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     # Create envs
     live_envs = list(range(len(envs)))
 
-    if os.environ.get("CAPTURE_RGB"):
-      for env in envs: env.capture_rgb = True
     if needs_reset:
       new_obs = self._initialize_episode(envs)
       new_obses = np.zeros((2, len(envs), *self._agent.observation_shape, 1))
@@ -371,6 +375,7 @@ class DataEfficientAtariRunner(run_experiment.Runner):
     total_episodes = 0
     max_steps = np.inf if max_steps is None else max_steps
     step = 0
+    CAPTURE_RGB_START, CAPTURE_RGB_END = int(os.environ.get("CAPTURE_RGB_START", 0)), int(os.environ.get("CAPTURE_RGB_END", 0))
 
     # Keep interacting until we reach a terminal state.
     while True:
@@ -378,6 +383,13 @@ class DataEfficientAtariRunner(run_experiment.Runner):
       step += 1
       episode_end.fill(0)
       total_steps += len(live_envs)
+
+      if CAPTURE_RGB_START == step:
+        for env in envs: env.capture_rgb = True
+      elif CAPTURE_RGB_END == step:
+        for env in envs: env.capture_rgb = False
+        save_rgb_clips(envs)
+
       actions = self._agent.step()
 
       # The agent may be hanging on to the previous new_obs, so we don't
@@ -446,11 +458,10 @@ class DataEfficientAtariRunner(run_experiment.Runner):
           or (episodes is not None and total_episodes > episodes)
       ):
         break
-    if os.environ.get("CAPTURE_RGB"):
-      for env in envs: env.capture_rgb = False
 
     state = (new_obses, rewards, terminals, episode_end, cum_rewards,
              cum_lengths)
+    if not CAPTURE_RGB_END: save_rgb_clips(envs)
     return cum_lengths, cum_rewards, state, envs
 
   def _run_train_phase(self, statistics):
